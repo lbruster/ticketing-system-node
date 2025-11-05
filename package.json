@@ -1,0 +1,21 @@
+{
+  "name": "ticketing-system",
+  "version": "1.0.0",
+  "description": "Ticketingsystem for educational purpose",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=prod node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env  NODE_ENV=dev node --watch server.js"
+  },
+  "author": "Leroy B.",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "morgan": "^1.10.1"
+  }
+}
