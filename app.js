@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import express from "express";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
+import ticketRoutes from "./routes/ticketsRoutes.js";
 
 const app = express();
 const DB_URL =
@@ -18,8 +19,11 @@ mongoose
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.get("/ping", (req, res) => {
+app.get("/", (req, res) => {
   req.status(200).send("pong");
 });
+
+app.use("/api/users", userRoutes);
+app.use("/api/tickets", ticketRoutes);
 
 export default app;

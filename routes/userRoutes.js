@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -32,14 +32,17 @@ router.post("/signup", async (req, res) => {
       }
     );
 
-    res.header("Authorization", token).send({
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      token,
-    });
+    res
+      .status(201)
+      .header("Authorization", token)
+      .json({
+        user: {
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+        token,
+      });
   } catch (error) {
     res.status(500).send("Error saving user, Something went wrong", error);
   }
@@ -49,8 +52,8 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send("Invalid email or password.");
-  const validPasword = await bcrypt.compare(req.body.password, user.password);
 
+  const validPasword = await bcrypt.compare(req.body.password, user.password);
   if (!validPasword) return res.status(400).send("Invalid email or password");
 
   const token = jwt.sign(
@@ -64,7 +67,7 @@ router.post("/login", async (req, res) => {
     }
   );
 
-  res.header("Authorization", token).send(token);
+  res.status(200).header("Authorization", token).json({ token: token });
 });
 
 export default router;
