@@ -1,5 +1,7 @@
 import express from "express";
 import Ticket from "../models/Ticket.js";
+import auth from "../middlewares/auth.js";
+import admin from "../middlewares/admin.js";
 
 const router = express.Router();
 
@@ -14,9 +16,10 @@ router.get("/", async (req, res) => {
 });
 
 // Post api/tickets
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const ticket = new Ticket({
-    user: req.body.user,
+    //user: req.body.user,
+    user: req.user._id,
     title: req.body.title,
     description: req.body.description,
     priority: req.body.priority,
@@ -48,7 +51,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Put api/tickets/:id
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const updates = req.body;
   try {
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, updates, {
@@ -64,9 +67,9 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete api/tickets/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
   try {
-    const ticket = await Ticket.findByIdAndDelete(req.params.id);
+    const ticket = await Ticket.findOneAndDelete({ id: req.params.id });
     if (!ticket) {
       return res.status(404).json({ message: "Ticket not found" });
     }
