@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
   });
 
   try {
-    user.save();
+    await user.save();
 
     const token = jwt.sign(
       {
