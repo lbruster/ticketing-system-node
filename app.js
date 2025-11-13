@@ -4,6 +4,7 @@ import express from "express";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import ticketRoutes from "./routes/ticketsRoutes.js";
+import error from "./middlewares/error.js";
 
 const app = express();
 const DB_URL =
@@ -25,5 +26,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use(error);
 
 export default app;
